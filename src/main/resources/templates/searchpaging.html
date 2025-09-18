@@ -12,19 +12,13 @@
                         <i>[[${message}]]</i>
                     </div>
                     <!-- Hết thông báo -->
-                    <div class="row mt-2 mb-2">
-                        <div class="col-md-6">
-                            <form th:action="@{/admin/categories/searchpaginated}" method="get">
-                                <div class="input-group">
-                                    <input type="text" class="form-control ml-2" name="name" id="name" placeholder="Nhập từ khóa để tìm" />
-                                    <button class="btn btn-outline-primary ml-2">Search</button>
-                                </div>
+                    <div class="row mt-2 mb-3">
+                        <div class="col d-flex justify-content-center align-items-center gap-2 flex-wrap">
+                            <form th:action="@{/admin/categories/searchpaginated}" method="get" class="d-flex align-items-center gap-2">
+                                <input type="text" class="form-control" name="name" id="name" placeholder="Nhập từ khóa để tìm" style="max-width: 320px;" />
+                                <button class="btn btn-outline-primary">Search</button>
                             </form>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="float-right">
-                                <a class="btn btn-outline-success" th:href="@{/admin/categories/add}">Add New Category</a>
-                            </div>
+                            <a class="btn btn-outline-success" th:href="@{/admin/categories/add}">Add New Category</a>
                         </div>
                     </div>
 
