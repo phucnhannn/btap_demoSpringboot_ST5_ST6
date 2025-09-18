@@ -65,14 +65,13 @@ public class CategoryController {
                 "Category is edited!!!!!!!!!" : "Category is saved!!!!!!!!!!";
         // Show message on list page after redirect
         redirectAttributes.addFlashAttribute("message", message);
-        return new ModelAndView("redirect:/admin/categories");
+        return new ModelAndView("redirect:/admin/categories/searchpaginated");
     }
 
     @RequestMapping("")
     public String list(ModelMap model) {
-        List<CategoryEntity> list = categoryService.findAll();
-        model.addAttribute("categories", list);
-        return "admin/categories/list";
+        // Forward to paginated list with defaults (page=1, size=5)
+        return "forward:/admin/categories/searchpaginated";
     }
 
     @GetMapping("edit/{categoryId}")
@@ -117,7 +116,7 @@ public class CategoryController {
             @RequestParam("size") Optional<Integer> size) {
         int count = (int) categoryService.count();
         int currentPage = page.orElse(1);
-        int pageSize = size.orElse(3);
+        int pageSize = size.orElse(5);
         Pageable pageable = PageRequest.of(currentPage - 1, pageSize, Sort.by("name"));
         Page<CategoryEntity> resultPage = null;
         if (StringUtils.hasText(name)) {
