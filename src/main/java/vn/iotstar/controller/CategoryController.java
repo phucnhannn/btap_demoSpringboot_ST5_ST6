@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import jakarta.validation.Valid;
 import vn.iotstar.entity.CategoryEntity;
@@ -45,7 +46,8 @@ public class CategoryController {
     @PostMapping("saveOrUpdate")
     public ModelAndView saveOrUpdate(ModelMap model,
             @Valid @ModelAttribute("category") CategoryModel cateModel,
-            BindingResult result) {
+            BindingResult result,
+            RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
             return new ModelAndView("admin/category/addOrEdit");
         }
@@ -55,14 +57,15 @@ public class CategoryController {
             return new ModelAndView("admin/category/addOrEdit");
         }
         CategoryEntity cateEntity = new CategoryEntity();
-        // ánh xạ thủ công thay cho BeanUtils để chắc chắn không bị mất dữ liệu
+       
         cateEntity.setCategoryId(cateModel.getCategoryId());
         cateEntity.setName(nameVal);
         categoryService.save(cateEntity);
         String message = Boolean.TRUE.equals(cateModel.getIsEdit()) ?
                 "Category is edited!!!!!!!!!" : "Category is saved!!!!!!!!!!";
-        model.addAttribute("message", message);
-        return new ModelAndView("forward:/admin/categories/searchpaginated", model);
+        // Show message on list page after redirect
+        redirectAttributes.addFlashAttribute("message", message);
+        return new ModelAndView("redirect:/admin/categories");
     }
 
     @RequestMapping("")

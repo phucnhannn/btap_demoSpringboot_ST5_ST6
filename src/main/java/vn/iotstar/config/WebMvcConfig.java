@@ -15,16 +15,19 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Bean(name = "localeResolver")
     public LocaleResolver getLocaleResolver() {
         CookieLocaleResolver resolver = new CookieLocaleResolver();
-        resolver.setCookieDomain("iostar.vn");
-        resolver.setDefaultLocale(Locale.ENGLISH);
+        // Use cookie to remember selected locale; do not hardcode domain for localhost
+        // resolver.setCookieDomain("iostar.vn"); // removed
+        resolver.setCookieName("LANG");
+        resolver.setCookiePath("/");
+        resolver.setCookieMaxAge(60 * 60 * 24 * 30); // 30 days
+        resolver.setDefaultLocale(new Locale("vi", "VN"));
         return resolver;
     }
 
     @Bean(name = "messageSource")
     public MessageSource getMessageResource() {
         ReloadableResourceBundleMessageSource messageResource = new ReloadableResourceBundleMessageSource();
-        // Đọc vào file src/main/resources/i18n/messages_xxx.properties
-        // Ví dụ: i18n/messages_en.properties
+        // Read files from src/main/resources/i18n/messages_*.properties
         messageResource.setBasename("classpath:i18n/messages");
         messageResource.setDefaultEncoding("UTF-8");
         return messageResource;
